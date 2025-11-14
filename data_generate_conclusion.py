@@ -8,9 +8,9 @@ import argparse
 import random  # Añadido para mezclar los datos del JSONL
 import uuid
 
-api_key = "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"
-client = OpenAI(api_key = api_key, base_url= "https://api.openai.com/v1/")
-with open("/data/yutao/browseragent2_dev/BrowserAgent/system_prompt_with_history_info.txt","r",encoding = "utf-8") as f:
+api_key = "sk-5TOLjHJSn7uyRj2gXZLxYsRe9vxmr8N9XWK2lQHalvgXiBoc"
+client = OpenAI(api_key = api_key, base_url= "https://open.xiaojingai.com/v1/")
+with open("/data/yutao/browseragent2_dev/BrowserAgent/system_prompt_with_history_info_conclusion.txt","r",encoding = "utf-8") as f:
     system_prompt = f.read()
 
 def call_tool_server(trajectory_ids: List[str], actions: List[str], finish: List[bool], start_url: str = None, **kwargs: Dict[str, List[Any]]) -> Dict[str, Any]:
@@ -88,10 +88,39 @@ def extract_conclusion(text):
     last_conclusion = blocks[-1].strip()
     return last_conclusion
 
-def write_a_data(input,output,output_file):
-    written_data = {"input_seq":input,"output_seq":output}
-    with open(output_file,"a",encoding = "utf-8") as fw:
-        fw.write(json.dumps(written_data,ensure_ascii=False) + "\n")
+def extract_obs(text):
+    """
+    Extract the most relevant HTML elements from <obs></obs> tags
+    """
+    blocks = re.findall(r'<obs>\s*(.*?)\s*</obs>', text, re.DOTALL)
+    
+    if not blocks:
+        return " "
+    
+    last_obs = blocks[-1].strip()
+    return last_obs
+
+def write_a_data(input, output, output_file, extracted_obs=None):
+    """
+    Write training data with optional extracted observation elements
+    
+    Args:
+        input: The input prompt
+        output: The model's response
+        output_file: Path to output file
+        extracted_obs: The extracted HTML elements from <obs> tags (optional)
+    """
+    written_data = {
+        "input_seq": input,
+        "output_seq": output
+    }
+    
+    # Optionally include extracted observations for analysis
+    if extracted_obs and extracted_obs.strip():
+        written_data["extracted_obs"] = extracted_obs
+    
+    with open(output_file, "a", encoding="utf-8") as fw:
+        fw.write(json.dumps(written_data, ensure_ascii=False) + "\n")
 
 
 
@@ -156,6 +185,7 @@ def Get_multi_turn_response(question, answer, output_file, start_url=None, golde
 
         last_command = extract_command(response)
         last_info = extract_conclusion(response)
+        last_obs = extract_obs(response)
 
         history = history + last_command + "\n"
         history_info = history_info + last_info + "\n"
@@ -166,7 +196,9 @@ def Get_multi_turn_response(question, answer, output_file, start_url=None, golde
         except Exception as e:
             print(f"[ERROR] Failed to update observation: {e}")
             # 如果更新失败，保持当前observation
-        write_a_data(prompt,response,output_file)
+        
+        # Write data including extracted observation elements
+        write_a_data(prompt, response, output_file, extracted_obs=last_obs)
 
         if "stop" in last_command:
             call_tool_server([tar_id], [response], [True], start_url=start_url)
