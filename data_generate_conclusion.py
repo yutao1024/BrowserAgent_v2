@@ -5,7 +5,7 @@ import requests
 from openai import OpenAI
 import json
 import argparse
-import random  # Añadido para mezclar los datos del JSONL
+import random
 import uuid
 
 api_key = "sk-5TOLjHJSn7uyRj2gXZLxYsRe9vxmr8N9XWK2lQHalvgXiBoc"
