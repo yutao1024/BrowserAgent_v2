@@ -22,3 +22,7 @@ echo "=================================="
 cd /data/yutao/browseragent2_dev/BrowserAgent/verl-tool
 python -m verl_tool.servers.serve --host $host --port $port --tool_type "text_browser"
 
+
+
+
+
