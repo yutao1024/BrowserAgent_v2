@@ -205,3 +205,24 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Large data files (over 1MB)
+# Test data files
+test_gen_data/mind2web/test_domain/*.json
+test_gen_data/mind2web/test_task/*.json
+test_gen_data/mind2web/test_website/*.json
+test_gen_data/mind2web/test.zip
+test_gen_data/mind2web/result/**/*.jsonl
+test_gen_data/webwalker/result/*.jsonl
+test_gen_data/webwalker/silver-*.jsonl
+test_gen_data/sample_traj.jsonl
+
+# Large model files
+verl-tool/verl/tests/e2e/arithmetic_sequence/model/model.safetensors
+
+# Large data generation files
+hotpot_1500*.jsonl
+nq_1500*.jsonl
+hotpot_test_gen.json
+sft_gen/**/*.jsonl
+sft_gen/**/*.json
