@@ -17,12 +17,13 @@ with open("system_prompt_with_history_info.txt","r",encoding = "utf-8") as f:
 
 def call_tool_server(trajectory_ids: List[str], actions: List[str], finish: List[bool], **kwargs: Dict[str, List[Any]]) -> Dict[str, Any]:
     """querying the tool server for the observation and done flag using aiohttp"""
-    env_url = "http://localhost:30810/get_observation"
+    env_url = "http://localhost:30816/get_observation"
 
+    if start_url is None:
+        start_url = "https://tigerai.ca/wiki/wikipedia_en_all_maxi_2022-05/A/User:The_other_Kiwix_guy/Landing"
+    
     extra_fields = [{
-        "url": (
-            "https://tigerai.ca/wiki/wikipedia_en_all_maxi_2022-05/A/User:The_other_Kiwix_guy/Landing"
-        )
+        "url": start_url
     }]
     data = {
         "trajectory_ids": trajectory_ids,

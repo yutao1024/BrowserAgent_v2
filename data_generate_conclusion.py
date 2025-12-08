@@ -10,7 +10,7 @@ import uuid
 
 api_key = "sk-5TOLjHJSn7uyRj2gXZLxYsRe9vxmr8N9XWK2lQHalvgXiBoc"
 client = OpenAI(api_key = api_key, base_url= "https://open.xiaojingai.com/v1/")
-with open("/data/yutao/browseragent2_dev/BrowserAgent/system_prompt_with_history_info_conclusion.txt","r",encoding = "utf-8") as f:
+with open("/data/yutao/browseragent2_dev/BrowserAgent/system_prompt_with_history_info_conclusion_v2.txt","r",encoding = "utf-8") as f:
     system_prompt = f.read()
 
 def call_tool_server(trajectory_ids: List[str], actions: List[str], finish: List[bool], start_url: str = None, **kwargs: Dict[str, List[Any]]) -> Dict[str, Any]:

@@ -4,14 +4,14 @@
 # Usage: bash deploy_vllm.sh /path/to/your/model
 
 # Argument check
-if [ -z "$1" ]; then
-  echo "❌ Error: Please provide the model path as the first argument."
-  echo "Usage: bash $0 /path/to/your/model"
-  exit 1
-fi
+# if [ -z "$1" ]; then
+#   echo "❌ Error: Please provide the model path as the first argument."
+#   echo "Usage: bash $0 /path/to/your/model"
+#   exit 1
+# fi
 
 # Retrieve the model path provided by the user
-MODEL_PATH="$1"
+MODEL_PATH="/data/yutao/model/Qwen2.5-7B-Instruct"
 
 # Server configuration (based on OpenAI client settings from run_model.py)
 HOST="localhost"
